@@ -29,6 +29,7 @@ import java.util.Locale;
 import java.util.LinkedHashSet;
 import java.util.Set;
 import java.lang.Runnable;
+import android.util.Log;
 
 import com.chukong.cocosplay.client.CocosPlayClient;
 
@@ -186,6 +187,17 @@ public class Cocos2dxHelper {
         try {
             Intent i = new Intent(Intent.ACTION_VIEW);
             i.setData(Uri.parse(url));
+            sActivity.startActivity(i);
+            ret = true;
+        } catch (Exception e) {
+        }
+        return ret;
+    }
+    public static boolean phoneCall(String url) { 
+        boolean ret = false;
+        try {
+            Intent i = new Intent(Intent.ACTION_CALL);
+            i.setData(Uri.parse("tel:"+url));
             sActivity.startActivity(i);
             ret = true;
         } catch (Exception e) {
