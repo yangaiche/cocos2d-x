@@ -67,6 +67,11 @@ namespace cocostudio
         CC_SAFE_DELETE(_instanceNode3DReader);
     }
     
+    void Node3DReader::destroyInstance()
+    {
+        CC_SAFE_DELETE(_instanceNode3DReader);
+    }
+    
     Vec3 Node3DReader::getVec3Attribute(const tinyxml2::XMLAttribute* attribute) const
     {
         if(!attribute)
@@ -167,6 +172,9 @@ namespace cocostudio
     {
         auto options = (Node3DOption*)node3DOptions;
         
+        auto nodeReader = NodeReader::getInstance();
+        nodeReader->setPropsWithFlatBuffers(node, (Table*)(options->nodeOptions()));
+        
         const Vector3* position = options->position3D();
         const Vector3* rotation = options->rotation3D();
         const Vector3* scale = options->scale3D();
@@ -190,9 +198,6 @@ namespace cocostudio
         }
         
         node->setCameraMask(cameraMask, true);
-        
-        auto nodeReader = NodeReader::getInstance();
-        nodeReader->setPropsWithFlatBuffers(node, (Table*)(options->nodeOptions()));
     }
     
     Node* Node3DReader::createNodeWithFlatBuffers(const flatbuffers::Table *node3DOptions)

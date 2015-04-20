@@ -135,6 +135,14 @@ public:
      */
     const AABB& getAABB() const;
     
+    /* 
+     * Get AABB Recursively
+     * Because some times we may have an empty Sprite3D Node as parent, but
+     * the Sprite3D don't contain any meshes, so getAABB()
+     * will return a wrong value at that time.
+     */
+    AABB getAABBRecursively();
+    
     /**
      * Executes an action, and returns the action that is executed. For Sprite3D special logic are needed to take care of Fading.
      *
@@ -222,7 +230,7 @@ protected:
 
     mutable AABB                 _aabb;                 // cache current aabb
     mutable Mat4                 _nodeToWorldTransform; // cache the matrix
-    bool                         _aabbDirty;
+    mutable bool                 _aabbDirty;
     unsigned int                 _lightMask;
     bool                         _shaderUsingLight; // is current shader using light ?
     bool                         _forceDepthWrite; // Always write to depth buffer
@@ -301,9 +309,11 @@ protected:
     std::unordered_map<std::string, Sprite3DData*> _spriteDatas; //cached sprite datas
 };
 
+/// @cond 
 extern std::string CC_DLL s_attributeNames[];//attribute names array
+/// @endcond
 
-// end of actions group
+// end of 3d group
 /// @}
 
 NS_CC_END

@@ -22,8 +22,18 @@
  THE SOFTWARE.
  ****************************************************************************/
 
+#include "base/ccMacros.h"
+#include "base/CCConfiguration.h"
+#include "base/CCDirector.h"
+#include "renderer/ccGLStateCache.h"
+#include "renderer/CCGLProgram.h"
+#include "renderer/CCGLProgramCache.h"
+#include "renderer/CCGLProgramState.h"
+#include "renderer/CCRenderer.h"
 #include "3d/CCSkybox.h"
 #include "3d/CCTextureCube.h"
+
+#include "2d/CCCamera.h"
 
 NS_CC_BEGIN
 
@@ -53,6 +63,17 @@ Skybox::~Skybox()
     _texture->release();
 }
 
+Skybox* Skybox::create(const std::string& positive_x, const std::string& negative_x,
+               const std::string& positive_y, const std::string& negative_y,
+               const std::string& positive_z, const std::string& negative_z)
+{
+    auto ret = new (std::nothrow) Skybox();
+    ret->init(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
+    
+    ret->autorelease();
+    return ret;
+}
+
 bool Skybox::init()
 {
     // create and set our custom shader
@@ -65,6 +86,19 @@ bool Skybox::init()
 
     CHECK_GL_ERROR_DEBUG();
 
+    return true;
+}
+
+bool Skybox::init(const std::string& positive_x, const std::string& negative_x,
+          const std::string& positive_y, const std::string& negative_y,
+          const std::string& positive_z, const std::string& negative_z)
+{
+    auto texture = TextureCube::create(positive_x, negative_x, positive_y, negative_y, positive_z, negative_z);
+    if (texture == nullptr)
+        return false;
+    
+    init();
+    setTexture(texture);
     return true;
 }
 
@@ -118,18 +152,31 @@ void Skybox::draw(Renderer* renderer, const Mat4& transform, uint32_t flags)
 
 void Skybox::onDraw(const Mat4& transform, uint32_t flags)
 {
+    Mat4 trans(transform);
+    const cocos2d::Vec3 pos(Camera::getVisitingCamera()->getPosition3D());
+    trans.m[12] = pos.x;
+    trans.m[13] = pos.y;
+    trans.m[14] = pos.z;
+
     auto state = getGLProgramState();
-    state->apply(transform);
-    
+    state->apply(trans);
+
     Vec4 color(_displayedColor.r / 255.f, _displayedColor.g / 255.f, _displayedColor.b / 255.f, 1.f);
     state->setUniformVec4("u_color", color);
 
-    GLboolean   depthFlag = glIsEnabled(GL_DEPTH_TEST);
-    GLint       depthFunc;
+    GLboolean depthFlag = glIsEnabled(GL_DEPTH_TEST);
+    GLint depthFunc;
     glGetIntegerv(GL_DEPTH_FUNC, &depthFunc);
 
     glEnable(GL_DEPTH_TEST);
     glDepthFunc(GL_LEQUAL);
+
+    GLboolean cullFlag = glIsEnabled(GL_CULL_FACE);
+    GLint cullMode;
+    glGetIntegerv(GL_CULL_FACE_MODE, &cullMode);
+
+    glEnable(GL_CULL_FACE);
+    glCullFace(GL_BACK);
 
     if (Configuration::getInstance()->supportsShareableVAO())
     {
@@ -158,6 +205,10 @@ void Skybox::onDraw(const Mat4& transform, uint32_t flags)
     }
 
     CC_INCREMENT_GL_DRAWN_BATCHES_AND_VERTICES(1, 8);
+
+    glCullFace(cullMode);
+    if (!cullFlag)
+        glDisable(GL_CULL_FACE);
 
     glDepthFunc(depthFunc);
     if (!depthFlag)
