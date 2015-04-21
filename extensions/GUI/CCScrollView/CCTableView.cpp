@@ -100,6 +100,7 @@ TableView::VerticalFillOrder TableView::getVerticalFillOrder()
 
 void TableView::reloadData()
 {
+    getContainer()->stopAllActions();
     _oldDirection = Direction::NONE;
 
     for(const auto &cell : _cellsUsed) {
