@@ -395,7 +395,7 @@ const Rect& Button::getCapInsetsPressedRenderer()const
 {
     return _capInsetsPressed;
 }
-  
+
 const Rect& Button::getCapInsetsDisabledRenderer()const
 {
     return _capInsetsDisabled;
