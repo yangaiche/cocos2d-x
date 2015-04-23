@@ -169,7 +169,9 @@ public:
      * Create and return a empty Widget instance pointer.
      */
     static Widget* create();
-
+    bool isTouchMoved();
+    bool _bTouchMoved;
+   
     /**
      * Sets whether the widget is enabled
      * 
@@ -931,7 +933,7 @@ protected:
 
     void cleanupWidget();
     LayoutComponent* getOrCreateLayoutComponent();
-
+    
 protected:
     bool _usingLayoutComponent;
     bool _unifySize;
@@ -942,6 +944,7 @@ protected:
     bool _affectByClipping;
     bool _ignoreSize;
     bool _propagateTouchEvents;
+    bool  _touch_moved;
 
     BrightStyle _brightStyle;
     SizeType _sizeType;
@@ -994,6 +997,7 @@ protected:
     
     std::string _callbackType;
     std::string _callbackName;
+   
 private:
     class FocusNavigationController;
     static FocusNavigationController* _focusNavigationController;

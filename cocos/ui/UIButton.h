@@ -68,7 +68,8 @@ public:
      *@return A empty Button instance.
      */
     static Button* create();
-
+    
+  
     /**
      * Create a button with custom textures.
      * @param normalImage normal state texture name.
@@ -301,6 +302,7 @@ protected:
     Scale9Sprite* _buttonClickedRenderer;
     Scale9Sprite* _buttonDisableRenderer;
     Label* _titleRenderer;
+    
 
     float _zoomScale;
     bool _prevIgnoreSize;

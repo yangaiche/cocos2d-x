@@ -743,10 +743,14 @@ bool Widget::isSwallowTouches()const
     }
     return false;
 }
-
+ 
+bool Widget::isTouchMoved()
+    {
+        return _touch_moved;
+    }
 bool Widget::onTouchBegan(Touch *touch, Event *unusedEvent)
 {
-    _hitted = false;
+    _touch_moved=_hitted = false;
     if (isVisible() && isEnabled() && isAncestorsEnabled() && isAncestorsVisible(this) )
     {
         _touchBeganPosition = touch->getLocation();
@@ -784,6 +788,7 @@ void Widget::propagateTouchEvent(cocos2d::ui::Widget::TouchEventType event, coco
 
 void Widget::onTouchMoved(Touch *touch, Event *unusedEvent)
 {
+    _touch_moved=true;
     _touchMovePosition = touch->getLocation();
     
     setHighlighted(hitTest(_touchMovePosition));
@@ -795,7 +800,7 @@ void Widget::onTouchMoved(Touch *touch, Event *unusedEvent)
     {
         this->propagateTouchEvent(TouchEventType::MOVED, this, touch);
     }
-    
+
     moveEvent();
 }
 
