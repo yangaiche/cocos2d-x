@@ -322,8 +322,9 @@ public class Cocos2dxHelper {
         Cocos2dxHelper.sCocos2dxHelperListener.showDialog(pTitle, pMessage);
     }
 
-    private static void showEditTextDialog(final String pTitle, final String pMessage, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength) {
-        Cocos2dxHelper.sCocos2dxHelperListener.showEditTextDialog(pTitle, pMessage, pInputMode, pInputFlag, pReturnType, pMaxLength);
+    private static void showEditTextDialog(final String pTitle, final String pMessage, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength,
+        final float pX,  final float pY, final float pWidth, final float pHeight) {
+        Cocos2dxHelper.sCocos2dxHelperListener.showEditTextDialog(pTitle, pMessage, pInputMode, pInputFlag, pReturnType, pMaxLength, pX, pY, pWidth, pHeight);
     }
 
     public static void setEditTextDialogResult(final String pResult) {
@@ -432,7 +433,8 @@ public class Cocos2dxHelper {
 
     public static interface Cocos2dxHelperListener {
         public void showDialog(final String pTitle, final String pMessage);
-        public void showEditTextDialog(final String pTitle, final String pMessage, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength);
+        public void showEditTextDialog(final String pTitle, final String pMessage, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength,
+            final float pX,  final float pY, final float pWidth, final float pHeight);
 
         public void runOnGLThread(final Runnable pRunnable);
     }

@@ -100,7 +100,8 @@ private:
     Color4B _colPlaceHolder;
 
     int   _maxLength;
-    Size _editSize;
+    Size  _editSize;
+    Vec2  _editPosition;
 };
 
 

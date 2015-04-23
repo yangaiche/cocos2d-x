@@ -45,6 +45,7 @@ import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.opengl.GLSurfaceView;
+import android.view.WindowManager;
 
 public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelperListener {
     // ===========================================================
@@ -279,10 +280,11 @@ public abstract class Cocos2dxActivity extends Activity implements Cocos2dxHelpe
     }
 
     @Override
-    public void showEditTextDialog(final String pTitle, final String pContent, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength) { 
+    public void showEditTextDialog(final String pTitle, final String pContent, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength,
+        final float pX,  final float pY, final float pWidth, final float pHeight) { 
         Message msg = new Message();
         msg.what = Cocos2dxHandler.HANDLER_SHOW_EDITBOX_DIALOG;
-        msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent, pInputMode, pInputFlag, pReturnType, pMaxLength);
+        msg.obj = new Cocos2dxHandler.EditBoxMessage(pTitle, pContent, pInputMode, pInputFlag, pReturnType, pMaxLength, pX, pY, pWidth, pHeight);
         this.mHandler.sendMessage(msg);
     }
     

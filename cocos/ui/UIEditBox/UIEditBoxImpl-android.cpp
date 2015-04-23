@@ -220,7 +220,8 @@ void EditBoxImplAndroid::setPlaceHolder(const char* pText)
 
 void EditBoxImplAndroid::setPosition(const Vec2& pos)
 { // don't need to be implemented on android platform.
-	
+    log("EditBoxImplAndroid setPosition");
+    _editPosition = pos;
 }
 
 void EditBoxImplAndroid::setVisible(bool visible)
@@ -303,7 +304,12 @@ void EditBoxImplAndroid::openKeyboard()
 						  (int)_keyboardReturnType,
 						  _maxLength,
 						  editBoxCallbackFunc,
-						  (void*)this  );
+						  (void*)this,
+                          _editPosition.x,
+                          _editPosition.y,
+                          _editSize.width,
+                          _editSize.height
+                          );
 	
 }
 

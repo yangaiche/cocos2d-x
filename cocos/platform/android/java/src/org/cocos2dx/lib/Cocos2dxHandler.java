@@ -98,7 +98,11 @@ public class Cocos2dxHandler extends Handler {
                 editBoxMessage.inputMode,
                 editBoxMessage.inputFlag,
                 editBoxMessage.returnType,
-                editBoxMessage.maxLength).show();
+                editBoxMessage.maxLength,
+                editBoxMessage.mX,
+                editBoxMessage.mY,
+                editBoxMessage.mWidth,
+                editBoxMessage.mHeight).show();
     }
     
     // ===========================================================
@@ -122,14 +126,22 @@ public class Cocos2dxHandler extends Handler {
         public int inputFlag;
         public int returnType;
         public int maxLength;
+        public float mX;
+        public float mY;
+        public float mWidth;
+        public float mHeight;
         
-        public EditBoxMessage(String title, String content, int inputMode, int inputFlag, int returnType, int maxLength){
+        public EditBoxMessage(String title, String content, int inputMode, int inputFlag, int returnType, int maxLength, float pX,  float pY, float pWidth, float pHeight){
             this.content = content;
             this.title = title;
             this.inputMode = inputMode;
             this.inputFlag = inputFlag;
             this.returnType = returnType;
             this.maxLength = maxLength;
+            this.mX = pX;
+            this.mY = pY;
+            this.mWidth = pWidth;
+            this.mHeight = pHeight;
         }
     }
 }

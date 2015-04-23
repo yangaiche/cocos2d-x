@@ -104,7 +104,7 @@ void showDialogJNI(const char * message, const char * title) {
     }
 }
 
-void showEditTextDialogJNI(const char* title, const char* message, int inputMode, int inputFlag, int returnType, int maxLength, EditTextCallback callback, void* ctx) {
+void showEditTextDialogJNI(const char* title, const char* message, int inputMode, int inputFlag, int returnType, int maxLength, EditTextCallback callback, void* ctx, float x, float y, float width, float height) {
     if (message == nullptr) {
         return;
     }
@@ -113,7 +113,7 @@ void showEditTextDialogJNI(const char* title, const char* message, int inputMode
     s_ctx = ctx;
 
     JniMethodInfo t;
-    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "showEditTextDialog", "(Ljava/lang/String;Ljava/lang/String;IIII)V")) {
+    if (JniHelper::getStaticMethodInfo(t, CLASS_NAME, "showEditTextDialog", "(Ljava/lang/String;Ljava/lang/String;IIIIFFFF)V")) {
         jstring stringArg1;
 
         if (!title) {
@@ -124,7 +124,7 @@ void showEditTextDialogJNI(const char* title, const char* message, int inputMode
 
         jstring stringArg2 = t.env->NewStringUTF(message);
 
-        t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1, stringArg2,inputMode, inputFlag, returnType, maxLength);
+        t.env->CallStaticVoidMethod(t.classID, t.methodID, stringArg1, stringArg2,inputMode, inputFlag, returnType, maxLength,x,y, width,height);
 
         t.env->DeleteLocalRef(stringArg1);
         t.env->DeleteLocalRef(stringArg2);

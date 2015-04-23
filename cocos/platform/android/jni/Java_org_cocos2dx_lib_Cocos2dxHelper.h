@@ -31,7 +31,7 @@ typedef void (*EditTextCallback)(const char* text, void* ctx);
 
 extern const char * getApkPath();
 extern void showDialogJNI(const char * message, const char * title);
-extern void showEditTextDialogJNI(const char* title, const char* content, int inputMode, int inputFlag, int returnType, int maxLength, EditTextCallback callback, void* ctx);
+extern void showEditTextDialogJNI(const char* title, const char* content, int inputMode, int inputFlag, int returnType, int maxLength, EditTextCallback callback, void* ctx, float x, float y, float width, float height);
 extern void terminateProcessJNI();
 extern std::string getCurrentLanguageJNI();
 extern std::string getPackageNameJNI();

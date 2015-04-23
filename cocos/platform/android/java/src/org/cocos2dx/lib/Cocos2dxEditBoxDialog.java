@@ -27,6 +27,7 @@ package org.cocos2dx.lib;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
@@ -42,6 +43,9 @@ import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.TextView.OnEditorActionListener;
+
+import android.util.Log;
+import android.graphics.Rect;
 
 public class Cocos2dxEditBoxDialog extends Dialog {
     // ===========================================================
@@ -127,6 +131,10 @@ public class Cocos2dxEditBoxDialog extends Dialog {
     private final int mInputFlag;
     private final int mReturnType;
     private final int mMaxLength;
+    private final float mX;
+    private final float mY;
+    private final float mWidth;
+    private final float mHeight;
 
     private int mInputFlagConstraints;
     private int mInputModeContraints;
@@ -136,7 +144,8 @@ public class Cocos2dxEditBoxDialog extends Dialog {
     // Constructors
     // ===========================================================
 
-    public Cocos2dxEditBoxDialog(final Context pContext, final String pTitle, final String pMessage, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength) {
+    public Cocos2dxEditBoxDialog(final Context pContext, final String pTitle, final String pMessage, final int pInputMode, final int pInputFlag, final int pReturnType, final int pMaxLength, 
+        final float pX,  final float pY, final float pWidth, final float pHeight) {
         super(pContext, android.R.style.Theme_Translucent_NoTitleBar_Fullscreen);
 //      super(context, R.style.Theme_Translucent);
 
@@ -146,6 +155,10 @@ public class Cocos2dxEditBoxDialog extends Dialog {
         this.mInputFlag = pInputFlag;
         this.mReturnType = pReturnType;
         this.mMaxLength = pMaxLength;
+        this.mX = pX;
+        this.mY = pY;
+        this.mWidth = pWidth;
+        this.mHeight = pHeight;
     }
 
     @Override
@@ -166,8 +179,15 @@ public class Cocos2dxEditBoxDialog extends Dialog {
         layout.addView(this.mTextViewTitle, textviewParams);
 
         this.mInputEditText = new EditText(this.getContext());
+        // this.mInputEditText.setBackground(null);
+        this.mInputEditText.setBackgroundColor(Color.WHITE);
         final LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        editTextParams.leftMargin = editTextParams.rightMargin = this.convertDipsToPixels(10);
+
+
+        mInputEditText.setX(Math.round(this.mX));
+        mInputEditText.setY(Math.round(this.mY));
+        // mInputEditText.setClipBounds(new Rect(100, 100, 100, 100));
+
 
         layout.addView(this.mInputEditText, editTextParams);
 
@@ -302,15 +322,23 @@ public class Cocos2dxEditBoxDialog extends Dialog {
 
     private int convertDipsToPixels(final float pDIPs) {
         final float scale = this.getContext().getResources().getDisplayMetrics().density;
+        Log.i("editBox", "Cocos2dxEditBoxDialog convertDipsToPixels scale is: "+scale);
         return Math.round(pDIPs * scale);
     }
 
     private void openKeyboard() {
-        final InputMethodManager imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.showSoftInput(this.mInputEditText, 0);
+        Log.i("editBox", "Cocos2dxEditBoxDialog openKeyboard");
+        try{
+            final InputMethodManager imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+            imm.showSoftInput(this.mInputEditText, 0);
+        }
+        catch(Exception e){
+            e.printStackTrace();
+        }
     }
 
     private void closeKeyboard() {
+        Log.i("editBox", "Cocos2dxEditBoxDialog closeKeyboard");
         final InputMethodManager imm = (InputMethodManager) this.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(this.mInputEditText.getWindowToken(), 0);
     }

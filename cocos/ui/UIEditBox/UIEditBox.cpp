@@ -25,6 +25,7 @@
 
 #include "UIEditBox.h"
 #include "UIEditBoxImpl.h"
+#include "base/CCDirector.h"
 
 NS_CC_BEGIN
 
@@ -349,13 +350,32 @@ void EditBox::setReturnType(EditBox::KeyboardReturnType returnType)
     }
 }
 
-/* override function */
+    /* override function */
 void EditBox::setPosition(const Vec2& pos)
 {
     Widget::setPosition(pos);
+
     if (_editBoxImpl != nullptr)
     {
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_IOS)
         _editBoxImpl->setPosition(pos);
+#elif (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
+        auto point = this->convertToWorldSpace(Vec2(0, 0));
+        log("converToworldSpace point x: %f y: %f", point.x, point.y);
+        point.x = 320;
+        point.y = 1135;
+        
+        auto glview = cocos2d::Director::getInstance()->getOpenGLView();
+        
+        Vec2 screenGLPos = glview->getViewPortRect().origin;
+        
+        float scaleX = glview->getScaleX();
+        float scaleY = glview->getScaleY();
+        point.x = point.x *scaleX + screenGLPos.x;
+        point.y = point.y *scaleY + screenGLPos.y;
+        
+        _editBoxImpl->setPosition(point);
+#endif
     }
 }
 
