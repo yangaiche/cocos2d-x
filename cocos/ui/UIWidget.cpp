@@ -786,6 +786,9 @@ void Widget::onTouchMoved(Touch *touch, Event *unusedEvent)
 {
     _touchMovePosition = touch->getLocation();
     
+    if (_touchBeganPosition.distanceSquared(_touchMovePosition) < 30)
+        return;
+    
     setHighlighted(hitTest(_touchMovePosition));
     
     /*
