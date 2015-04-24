@@ -49,7 +49,30 @@ TableView* TableView::create(TableViewDataSource* dataSource, Size size, Node *c
 
     return table;
 }
-
+void TableView::scrolltoCell(int idx,bool vertical,bool animation)
+{
+    float offset =0;
+    for (auto i=_dataSource->numberOfCellsInTableView(this)-1; i>=idx; --i) {
+        
+            offset+=(vertical?_dataSource->tableCellSizeForIndex(this, i).height:_dataSource->tableCellSizeForIndex(this, i).width);
+    }
+    if(vertical)
+    {
+        offset=getViewSize().height-offset;
+        if(offset>0)offset=0;
+        else if(offset<-getContentSize().height)offset=getContentSize().height;
+        
+        setContentOffsetInDuration({0,offset}, animation?1:0);
+    }
+    else
+    {
+        offset=getViewSize().width-offset;
+        if(offset>0)offset=0;
+        else if(offset<-getContentSize().width)offset=getContentSize().width;
+        
+        setContentOffsetInDuration({offset,0}, animation?1:0);
+    }
+}
 bool TableView::initWithViewSize(Size size, Node* container/* = nullptr*/)
 {
     if (ScrollView::initWithViewSize(size,container))

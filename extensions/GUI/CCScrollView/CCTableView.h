@@ -198,7 +198,8 @@ public:
     virtual ~TableView();
 
     bool initWithViewSize(Size size, Node* container = NULL);
-
+    
+    void scrolltoCell(int idx,bool vertical=true, bool animation=false);
     /**
      * data source
      * @js NA
