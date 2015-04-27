@@ -126,7 +126,7 @@ void TableView::reloadData()
     getContainer()->stopAllActions();
     _oldDirection = Direction::NONE;
 
-    for(const auto &cell : _cellsUsed) {
+    for( auto cell : _cellsUsed) {
         if(_tableViewDelegate != nullptr) {
             _tableViewDelegate->tableCellWillRecycle(this, cell);
         }
@@ -155,7 +155,7 @@ TableViewCell *TableView::cellAtIndex(ssize_t idx)
 {
     if (_indices->find(idx) != _indices->end())
     {
-        for (const auto& cell : _cellsUsed)
+        for ( auto cell : _cellsUsed)
         {
             
             if (cell->getIdx() == idx)

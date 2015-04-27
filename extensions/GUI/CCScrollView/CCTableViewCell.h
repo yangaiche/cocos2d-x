@@ -36,30 +36,27 @@
  */
 NS_CC_EXT_BEGIN
 
-
 /**
  * Abstract class for SWTableView cell node
  */
-class CC_EX_DLL TableViewCell: public Node
-{
+class CC_EX_DLL TableViewCell : public Node {
 public:
-    static TableViewCell* create() \
-    { \
-        TableViewCell *pRet = new(std::nothrow) TableViewCell(); \
-        if (pRet && pRet->init()) \
-        { \
-            pRet->autorelease(); \
-            return pRet; \
-        } \
-        else \
-        { \
-            delete pRet; \
-            pRet = NULL; \
-            return NULL; \
-        } \
+    static TableViewCell* create()
+    {
+        TableViewCell* pRet = new (std::nothrow) TableViewCell();
+        if (pRet && pRet->init()) {
+            pRet->autorelease();
+            return pRet;
+        }
+        else {
+            delete pRet;
+            pRet = NULL;
+            return NULL;
+        }
     }
-    
-    TableViewCell(int tag=0) {
+
+    TableViewCell(int tag = 0)
+    {
         setTag(tag);
     }
     /**
@@ -70,7 +67,7 @@ public:
     /**
      * Cleans up any resources linked to this cell and resets <code>idx</code> property.
      */
-    void reset();
+    virtual void reset();
 
 private:
     ssize_t _idx;
