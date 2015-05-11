@@ -37,6 +37,7 @@ _autoScrollSpeed(0.0f),
 _autoScrollDirection(AutoScrollDirection::LEFT),
 _curPageIdx(0),
 _touchMoveDirection(TouchDirection::LEFT),
+_touchEstimateDirection(TouchDirection::UNKNOW),
 _leftBoundaryChild(nullptr),
 _rightBoundaryChild(nullptr),
 _leftBoundary(0.0f),
@@ -338,26 +339,53 @@ void PageView::autoScroll(float dt)
 bool PageView::onTouchBegan(Touch *touch, Event *unusedEvent)
 {
     bool pass = Layout::onTouchBegan(touch, unusedEvent);
+    
+    _touchEstimateDirection = TouchDirection::UNKNOW;
     return pass;
 }
 
 void PageView::onTouchMoved(Touch *touch, Event *unusedEvent)
 {
-    Layout::onTouchMoved(touch, unusedEvent);
-    if (!_isInterceptTouch)
+    _touchMovePosition = touch->getLocation();
+
+    if (_touchEstimateDirection == TouchDirection::UNKNOW)
+    {
+        auto x = std::abs(_touchBeganPosition.x - _touchMovePosition.x);
+        auto y = std::abs(_touchBeganPosition.y - _touchMovePosition.y);
+        if (x > y * 3)
+            _touchEstimateDirection = TouchDirection::HORIZONTAL;
+        else if (y > x * 3)
+            _touchEstimateDirection = TouchDirection::VERTICAL;
+        else
+            return;
+    }
+
+    if (_touchEstimateDirection == TouchDirection::HORIZONTAL)
     {
         handleMoveLogic(touch);
     }
+    else
+        Layout::onTouchMoved(touch, unusedEvent);
 }
 
 void PageView::onTouchEnded(Touch *touch, Event *unusedEvent)
 {
-    Layout::onTouchEnded(touch, unusedEvent);
-    if (!_isInterceptTouch)
+//    Layout::onTouchEnded(touch, unusedEvent);
+//    if (!_isInterceptTouch)
+//    {
+//        handleReleaseLogic(touch);
+//    }
+//    _isInterceptTouch = false;
+    if (_touchEstimateDirection == TouchDirection::HORIZONTAL)
     {
-        handleReleaseLogic(touch);
+        if (!_isInterceptTouch)
+        {
+            handleReleaseLogic(touch);
+        }
+        _isInterceptTouch = false;
     }
-    _isInterceptTouch = false;
+    else
+        Layout::onTouchEnded(touch, unusedEvent);
 }
     
 void PageView::onTouchCancelled(Touch *touch, Event *unusedEvent)

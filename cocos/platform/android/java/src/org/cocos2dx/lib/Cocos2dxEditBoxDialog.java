@@ -180,12 +180,12 @@ public class Cocos2dxEditBoxDialog extends Dialog {
 
         this.mInputEditText = new EditText(this.getContext());
         // this.mInputEditText.setBackground(null);
-        this.mInputEditText.setBackgroundColor(Color.WHITE);
+        // this.mInputEditText.setBackgroundColor(Color.WHITE);
         final LinearLayout.LayoutParams editTextParams = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
 
 
-        mInputEditText.setX(Math.round(this.mX));
-        mInputEditText.setY(Math.round(this.mY));
+        // mInputEditText.setX(Math.round(this.mX));
+        // mInputEditText.setY(Math.round(this.mY));
         // mInputEditText.setClipBounds(new Rect(100, 100, 100, 100));
 
 

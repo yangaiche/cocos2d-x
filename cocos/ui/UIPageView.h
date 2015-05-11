@@ -76,7 +76,10 @@ public:
     enum class TouchDirection
     {
         LEFT,
-        RIGHT
+        RIGHT,
+        VERTICAL,
+        HORIZONTAL,
+        UNKNOW
     };
     
     /**
@@ -276,6 +279,7 @@ protected:
     Vector<Layout*> _pages;
 
     TouchDirection _touchMoveDirection;
+    TouchDirection _touchEstimateDirection;
    
     Widget* _leftBoundaryChild;
     Widget* _rightBoundaryChild;

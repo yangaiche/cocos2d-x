@@ -785,10 +785,10 @@ void Widget::propagateTouchEvent(cocos2d::ui::Widget::TouchEventType event, coco
 void Widget::onTouchMoved(Touch *touch, Event *unusedEvent)
 {
     _touchMovePosition = touch->getLocation();
-    
+#if (CC_TARGET_PLATFORM == CC_PLATFORM_ANDROID)
     if (_touchBeganPosition.distanceSquared(_touchMovePosition) < 30)
         return;
-    
+#endif
     setHighlighted(hitTest(_touchMovePosition));
     
     /*
