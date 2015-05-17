@@ -1155,7 +1155,11 @@ bool MoveTo::initWithDuration(float duration, const Vec3& position)
     
     return ret;
 }
-
+void MoveTo::resetEndPos(Vec2& endPos)
+{
+    _endPosition={endPos.x,endPos.y,0};
+    _positionDelta= _endPosition - getTarget()->getPosition3D();
+}
 MoveTo* MoveTo::clone() const
 {
     // no copy constructor

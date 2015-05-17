@@ -653,7 +653,7 @@ public:
     virtual MoveTo* clone() const override;
     virtual MoveTo* reverse() const  override;
     virtual void startWithTarget(Node *target) override;
-    
+    void resetEndPos(Vec2& endPos);
 CC_CONSTRUCTOR_ACCESS:
     MoveTo() {}
     virtual ~MoveTo() {}
