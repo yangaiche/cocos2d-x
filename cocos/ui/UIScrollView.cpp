@@ -40,6 +40,7 @@ IMPLEMENT_CLASS_GUI_INFO(ScrollView)
 ScrollView::ScrollView():
 _innerContainer(nullptr),
 _direction(Direction::VERTICAL),
+_move_direction(Direction::NONE),
 _topBoundary(0.0f),
 _bottomBoundary(0.0f),
 _leftBoundary(0.0f),
@@ -1509,16 +1510,35 @@ bool ScrollView::onTouchBegan(Touch *touch, Event *unusedEvent)
             handlePressLogic(touch);
         }
     }
+    _move_direction = Direction::NONE;
     return pass;
 }
 
 void ScrollView::onTouchMoved(Touch *touch, Event *unusedEvent)
 {
-    Layout::onTouchMoved(touch, unusedEvent);
-    if (!_isInterceptTouch)
+    Vec2 pos = touch->getLocation();
+    
+    if (_move_direction == Direction::NONE)
     {
-        handleMoveLogic(touch);
+        auto x = std::abs(_touchBeganPosition.x - pos.x);
+        auto y = std::abs(_touchBeganPosition.y - pos.y);
+        if (x > y * 3)
+            _move_direction = Direction::HORIZONTAL;
+        else if (y > x * 3)
+            _move_direction = Direction::VERTICAL;
+        else
+            return;
     }
+    if (_move_direction == _direction && !_isInterceptTouch)
+        handleMoveLogic(touch);
+    else
+        Layout::onTouchMoved(touch, unusedEvent);
+
+//    Layout::onTouchMoved(touch, unusedEvent);
+//    if (!_isInterceptTouch)
+//    {
+//        handleMoveLogic(touch);
+//    }
 }
 
 void ScrollView::onTouchEnded(Touch *touch, Event *unusedEvent)
@@ -1529,6 +1549,7 @@ void ScrollView::onTouchEnded(Touch *touch, Event *unusedEvent)
         handleReleaseLogic(touch);
     }
     _isInterceptTouch = false;
+    _move_direction = Direction::NONE;
 }
 
 void ScrollView::onTouchCancelled(Touch *touch, Event *unusedEvent)
@@ -1539,6 +1560,7 @@ void ScrollView::onTouchCancelled(Touch *touch, Event *unusedEvent)
         handleReleaseLogic(touch);
     }
     _isInterceptTouch = false;
+    _move_direction = Direction::NONE;
 }
 
 void ScrollView::update(float dt)

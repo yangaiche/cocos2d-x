@@ -518,6 +518,8 @@ protected:
 #pragma warning (pop)
 #endif
     ccScrollViewCallback _eventCallback;
+    
+    Direction _move_direction;
 };
 
 }
