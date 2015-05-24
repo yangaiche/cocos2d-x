@@ -329,8 +329,8 @@ void TableView::_updateContentSize()
 		_oldDirection = _direction;
 	}
     
-    if (_loading_status)
-        _loading_node->setPosition(Vec2(size.width/2, size.height + 80));
+    if (_loading_status && _loading_node)
+        _loading_node->setPosition(Vec2(size.width/2, size.height + 100));
 
 }
 
