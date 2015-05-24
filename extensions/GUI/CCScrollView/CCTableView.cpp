@@ -83,6 +83,7 @@ bool TableView::initWithViewSize(Size size, Node* container/* = nullptr*/)
         this->setDirection(Direction::VERTICAL);
 
         ScrollView::setDelegate(this);
+
         return true;
     }
     return false;
@@ -327,6 +328,9 @@ void TableView::_updateContentSize()
 		}
 		_oldDirection = _direction;
 	}
+    
+    if (_loading_status)
+        _loading_node->setPosition(Vec2(size.width/2, size.height + 80));
 
 }
 

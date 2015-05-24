@@ -27,6 +27,8 @@
 #define __CCSCROLLVIEW_H__
 
 #include "2d/CCLayer.h"
+#include "2d/CCSprite.h"
+#include "2d/CCLabel.h"
 #include "base/CCEventListenerTouch.h"
 #include "2d/CCActionTween.h"
 #include "extensions/ExtensionMacros.h"
@@ -264,6 +266,8 @@ public:
     void setPullDownProcessDone();
     std::function<void () >    _cb_pull_down ;
     std::function<void (float) > _cb_head_offset;
+    
+    void setLoadingStatus(bool status);
 protected:
 
     bool  _is_cb_pull_down_calling;
@@ -331,6 +335,12 @@ protected:
      * Container holds scroll view contents, Sets the scrollable container object of the scroll view
      */
     Node* _container;
+    
+    Sprite* _loading_sign;
+    Label* _loading_text;
+    Node* _loading_node;
+    char _loading_count;
+    bool _loading_status;
     /**
      * Determiens whether user touch is moved after begin phase.
      */

@@ -290,7 +290,6 @@ protected:
 
     void _updateCellPositions();
 
-
     TableViewCell *_touchedCell;
     /**
      * vertical direction of cell filling

@@ -44,6 +44,8 @@ NS_CC_EXT_BEGIN
 #define MOVE_INCH            7.0f/160.0f
 #define BOUNCE_BACK_FACTOR   0.45f
 
+#define PULL_DOWN_LOADING_HEIGHT 200
+
 static float convertDistanceFromPointToInch(float pointDis)
 {
     auto glview = Director::getInstance()->getOpenGLView();
@@ -67,6 +69,10 @@ ScrollView::ScrollView()
 , _maxScale(0.0f)
 , _scissorRestored(false)
 , _touchListener(nullptr)
+, _loading_sign(nullptr)
+, _loading_text(nullptr)
+, _loading_node(nullptr)
+,_loading_count(0)
 {
 
 }
@@ -117,6 +123,7 @@ bool ScrollView::initWithViewSize(Size size, Node *container/* = nullptr*/)
             _container->ignoreAnchorPointForPosition(false);
             _container->setAnchorPoint(Vec2(0.0f, 0.0f));
         }
+        
 
         this->setViewSize(size);
 
@@ -134,11 +141,38 @@ bool ScrollView::initWithViewSize(Size size, Node *container/* = nullptr*/)
         
         this->addChild(_container);
         _minScale = _maxScale = 1.0f;
-
+        
         
         return true;
     }
     return false;
+}
+void ScrollView::setLoadingStatus(bool status)
+{
+    _loading_status = status;
+    if (status){
+        if (!this->_loading_node){
+            _loading_node = Node::create();
+            
+            _loading_sign = Sprite::createWithSpriteFrameName("image/loading.png");
+            _loading_node->addChild(_loading_sign);
+            _loading_sign->setPositionY(20);
+            
+            _loading_text = Label::createWithSystemFont(" ", "Heiti SC", 30, Size(0.0f, 0.0f), TextHAlignment::CENTER, TextVAlignment::CENTER);
+            _loading_node->addChild(_loading_text);
+            _loading_text->setPositionY(-20);
+            _loading_text->setColor(Color3B::BLACK);
+            
+            _loading_node->setVisible(false);
+            this->addChild(_loading_node);
+        }
+        _loading_node->setVisible(true);
+    }
+    else{
+        if (_loading_node)
+            _loading_node->setVisible(false);
+    }
+    
 }
 
 bool ScrollView::init()
@@ -780,14 +814,23 @@ void ScrollView::onTouchMoved(Touch* touch, Event* event)
             this->setZoomScale(this->getZoomScale()*len/_touchLength);
         }
     }
-    float topOffset=-getContentOffset().y+getViewSize().height-getContentSize().height;
-    if(topOffset>0 && !_is_cb_pull_down_calling)
-    {
-       
-//        if(_cb_head_offset)
-//            _cb_head_offset(topOffset);
-        
-        
+    if (_loading_status){
+        float topOffset=-getContentOffset().y+getViewSize().height-getContentSize().height;
+        if(topOffset>0 && !_is_cb_pull_down_calling)
+        {
+            _loading_sign->setRotation(topOffset*10);
+            _loading_count++;
+            if (_loading_count > 3)
+                _loading_count = 0;
+            std::string point = "";
+            for (int i = 0; i < _loading_count; ++i)
+                point.append(".");
+            if (topOffset > PULL_DOWN_LOADING_HEIGHT)
+                _loading_text->setString("释放以刷新"+point);
+            else
+                _loading_text->setString("下拉刷新"+point);
+            
+        }
     }
 }
 
@@ -817,7 +860,7 @@ void ScrollView::onTouchEnded(Touch* touch, Event* event)
     float topOffset=-getContentOffset().y+getViewSize().height-getContentSize().height;
     
     
-    if(topOffset>200 && !_is_cb_pull_down_calling)
+    if(topOffset>PULL_DOWN_LOADING_HEIGHT && !_is_cb_pull_down_calling)
     {
         _is_cb_pull_down_calling=true;
         if(_cb_pull_down )
