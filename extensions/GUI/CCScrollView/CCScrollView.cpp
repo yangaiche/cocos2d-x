@@ -72,7 +72,6 @@ ScrollView::ScrollView()
 , _loading_sign(nullptr)
 , _loading_text(nullptr)
 , _loading_node(nullptr)
-,_loading_count(0)
 {
 
 }
@@ -165,6 +164,7 @@ void ScrollView::setLoadingStatus(bool status)
             
             _loading_node->setVisible(false);
             this->addChild(_loading_node);
+            _loading_node->setPosition(Vec2(_viewSize.width/2, 100));
         }
         _loading_node->setVisible(true);
     }
@@ -816,19 +816,14 @@ void ScrollView::onTouchMoved(Touch* touch, Event* event)
     }
     if (_loading_status){
         float topOffset=-getContentOffset().y+getViewSize().height-getContentSize().height;
-        if(topOffset>0 && !_is_cb_pull_down_calling)
+        if(topOffset>0)
         {
             _loading_sign->setRotation(topOffset*10);
-            _loading_count++;
-            if (_loading_count > 3)
-                _loading_count = 0;
-            std::string point = "";
-            for (int i = 0; i < _loading_count; ++i)
-                point.append(".");
+
             if (topOffset > PULL_DOWN_LOADING_HEIGHT)
-                _loading_text->setString("释放以刷新"+point);
+                _loading_text->setString("释放以刷新...");
             else
-                _loading_text->setString("下拉刷新"+point);
+                _loading_text->setString("下拉刷新...");
             
         }
     }
@@ -860,7 +855,7 @@ void ScrollView::onTouchEnded(Touch* touch, Event* event)
     float topOffset=-getContentOffset().y+getViewSize().height-getContentSize().height;
     
     
-    if(topOffset>PULL_DOWN_LOADING_HEIGHT && !_is_cb_pull_down_calling)
+    if(_loading_status && topOffset>PULL_DOWN_LOADING_HEIGHT)
     {
         _is_cb_pull_down_calling=true;
         if(_cb_pull_down )

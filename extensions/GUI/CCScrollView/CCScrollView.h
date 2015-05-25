@@ -339,7 +339,6 @@ protected:
     Sprite* _loading_sign;
     Label* _loading_text;
     Node* _loading_node;
-    char _loading_count;
     bool _loading_status;
     /**
      * Determiens whether user touch is moved after begin phase.
