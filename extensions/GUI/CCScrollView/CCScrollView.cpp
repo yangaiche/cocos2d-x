@@ -72,7 +72,7 @@ ScrollView::ScrollView()
 , _loading_sign(nullptr)
 , _loading_text(nullptr)
 , _loading_node(nullptr)
-，_loading_status(false)
+, _loading_status(false)
 {
 
 }
