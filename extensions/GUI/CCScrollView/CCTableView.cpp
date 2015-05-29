@@ -281,10 +281,9 @@ void TableView::_addCellIfNecessary(TableViewCell* cell)
         this->getContainer()->addChild(cell);
     }
     auto size = cell->getContentSize();
-    if (!cell->getChildByTag(DEL_SIGN_NODE_TAG)) {
+    if (_del_cell_status && !cell->getChildByTag(DEL_SIGN_NODE_TAG)) {
         Node* baseNode = Node::create();
         baseNode->setPosition(Vec2(size.width, 0));
-        //        cell->addChild(baseNode, -1);
         cell->addChild(baseNode);
         baseNode->setTag(DEL_SIGN_NODE_TAG);
         
@@ -322,13 +321,6 @@ void TableView::_addCellIfNecessary(TableViewCell* cell)
         b->setPosition(Vec2::ZERO);
         b->setSwallowTouches(true);
         
-        
-//        Label* del_label = Label::createWithSystemFont(
-//            "删除", "Heiti SC", 30, Size(0.0f, 0.0f), TextHAlignment::CENTER,
-//            TextVAlignment::CENTER);
-//        del_label->setColor(Color3B::BLACK);
-//        baseNode->addChild(del_label);
-//        del_label->setPosition(Vec2(DEL_SIGN_WIDTH / 2, size.height / 2));
         Sprite* del_sign = Sprite::createWithSpriteFrameName("image/trash.png");
         del_sign->setPosition(Vec2(DEL_SIGN_WIDTH / 2, size.height / 2));
         baseNode->addChild(del_sign);
